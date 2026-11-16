@@ -1,0 +1,17 @@
+
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="115" fill="#7546C8"/>
+  <circle cx="256" cy="256" r="190" fill="#9565DF"/>
+  <path d="M115 155 L397 155 L397 345 L115 345 Z"
+        rx="20" fill="#FFFFFF"/>
+  <path d="M115 155 L397 155 L397 218 L115 218 Z"
+        fill="#E94D63"/>
+  <path d="M115 282 L397 282 L397 345 L115 345 Z"
+        fill="#4778D0"/>
+  <text x="256" y="265" text-anchor="middle"
+        font-size="105">💻</text>
+  <text x="256" y="408" text-anchor="middle"
+        font-family="Arial" font-size="38"
+        font-weight="bold" fill="#FFFFFF">2027</text>
+</svg>
