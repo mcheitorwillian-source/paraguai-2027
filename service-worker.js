@@ -1,5 +1,5 @@
 
-const CACHE_NAME = "expedicao-paraguai-v3";
+const CACHE_NAME = "expedicao-paraguai-v4";
 
 const ARQUIVOS = [
   "./",
@@ -38,8 +38,18 @@ self.addEventListener("fetch", evento => {
   if (evento.request.method !== "GET") return;
 
   evento.respondWith(
-    caches.match(evento.request).then(resposta => {
-      return resposta || fetch(evento.request);
-    })
+    fetch(evento.request)
+      .then(resposta => {
+        if (resposta.ok && new URL(evento.request.url).origin === self.location.origin) {
+          const copia = resposta.clone();
+
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(evento.request, copia);
+          });
+        }
+
+        return resposta;
+      })
+      .catch(() => caches.match(evento.request));
   );
 });
