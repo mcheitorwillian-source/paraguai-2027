@@ -983,3 +983,184 @@ textarea:focus-visible {
   min-width: 0;
   overflow-wrap: anywhere;
 }
+
+/* =====================================
+   CHECKLIST — ESTILO MODERNO
+===================================== */
+
+/* Cada objetivo vira um cartão separado */
+.tarefa {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  width: 100%;
+  min-height: 68px;
+  box-sizing: border-box;
+
+  padding: 16px 18px;
+  margin: 0 0 12px 0;
+
+  background: linear-gradient(135deg, #29213f, #211a34);
+  border: 1px solid #49385f;
+  border-radius: 17px;
+
+  box-shadow: 0 4px 12px #00000025;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+/* Quadrado de marcar */
+.tarefa input {
+  appearance: none;
+  -webkit-appearance: none;
+
+  display: grid;
+  place-content: center;
+
+  flex: 0 0 24px;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px;
+  min-height: 24px;
+
+  padding: 0 !important;
+  margin: 0;
+
+  border: 2px solid #9b83bd;
+  border-radius: 8px;
+  background: #171126;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* Quando marcado */
+.tarefa input:checked {
+  background: #e8bd72;
+  border-color: #e8bd72;
+}
+
+/* Símbolo de confirmação */
+.tarefa input:checked::after {
+  content: "✓";
+  color: #21172c;
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* Texto do objetivo */
+.tarefa span {
+  flex: 1;
+  min-width: 0;
+
+  color: #eee8fa;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+/* Cartão concluído */
+.tarefa:has(input:checked) {
+  background: #211d30;
+  border-color: #776044;
+}
+
+.tarefa input:checked + span {
+  color: #a99bbd;
+  text-decoration: line-through;
+  text-decoration-color: #a99bbd;
+}
+
+/* Evita elementos ultrapassando o cartão */
+.tarefa * {
+  box-sizing: border-box;
+}
+
+/* CHECKLIST — EXPEDIÇÃO PIRATA */
+
+.lista-tarefas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 22px 0;
+}
+
+.item-tarefa {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  min-height: 68px;
+  background: linear-gradient(135deg, #29213f, #201a32);
+  border: 1px solid #59466f;
+  border-radius: 17px;
+  box-sizing: border-box;
+}
+
+.conteudo-tarefa {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+.item-tarefa input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 24px;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px;
+  min-height: 24px;
+  margin: 0;
+  padding: 0 !important;
+  border: 2px solid #b69ad8;
+  border-radius: 8px;
+  background: #151020;
+  display: grid;
+  place-items: center;
+}
+
+.item-tarefa input[type="checkbox"]:checked {
+  background: #e8bd72;
+  border-color: #e8bd72;
+}
+
+.item-tarefa input[type="checkbox"]:checked::after {
+  content: "✓";
+  color: #21172c;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.item-tarefa span {
+  color: #eee8fa;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.item-tarefa.concluida {
+  border-color: #776044;
+  background: #211d30;
+}
+
+.item-tarefa.concluida span {
+  color: #a99bbd;
+  text-decoration: line-through;
+}
+
+.botao-excluir-tarefa {
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #80505d;
+  border-radius: 11px;
+  background: #38202f;
+  color: #ffabb5;
+  font-size: 15px;
+  cursor: pointer;
+}

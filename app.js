@@ -96,67 +96,100 @@ if (!main) {
   // CHECKLIST
   // ==========================================
 
-  function abrirChecklist() {
-    const lista = tarefas.map((tarefa, indice) => `
-      <label class="item-tarefa">
-        <input
-          type="checkbox"
-          data-tarefa="${indice}"
-          ${tarefa.feita ? "checked" : ""}
-        >
-        <span>${escapar(tarefa.texto)}</span>
-      </label>
-    `).join("");
+function abrirChecklist() {
+  const lista = tarefas.map((tarefa, indice) => {
+    const texto = typeof tarefa === "string"
+      ? tarefa
+      : tarefa.texto || tarefa.nome || "Tarefa sem nome";
 
-    abrirTela("Checklist da expedição", `
-      <p class="texto-suave">
-        Marque cada tarefa conforme concluir os preparativos.
-      </p>
+    const feita = typeof tarefa === "object" && tarefa.feita;
 
-      <div class="lista-tarefas">
-        ${lista}
+    return `
+      <div class="item-tarefa ${feita ? "concluida" : ""}">
+        <label class="conteudo-tarefa">
+          <input
+            type="checkbox"
+            data-tarefa="${indice}"
+            ${feita ? "checked" : ""}
+          >
+          <span>${escapar(texto)}</span>
+        </label>
+
+        <button
+          class="botao-excluir-tarefa"
+          data-remover-tarefa="${indice}"
+          aria-label="Excluir tarefa"
+          title="Excluir tarefa"
+        >✕</button>
       </div>
+    `;
+  }).join("");
 
-      <div class="formulario">
-        <input
-          id="novaTarefa"
-          type="text"
-          placeholder="Adicionar nova tarefa..."
-        >
+  abrirTela("Checklist da expedição", `
+    <p class="texto-suave">
+      ⚓ Prepare sua expedição e acompanhe cada objetivo.
+    </p>
 
-        <button class="botao-principal" data-acao="adicionar-tarefa">
-          + Adicionar tarefa
-        </button>
-      </div>
+    <div class="lista-tarefas">
+      ${lista || '<p class="texto-suave">Nenhuma tarefa por enquanto.</p>'}
+    </div>
 
-      <p class="texto-suave">
-        ${tarefas.filter(t => t.feita).length} de ${tarefas.length}
-        tarefas concluídas.
-      </p>
-    `);
+    <div class="formulario">
+      <input
+        id="novaTarefa"
+        type="text"
+        placeholder="Escreva um novo objetivo..."
+      >
+
+      <button class="botao-principal" data-acao="adicionar-tarefa">
+        + Adicionar objetivo
+      </button>
+    </div>
+
+    <p class="texto-suave">
+      ${tarefas.filter(t => typeof t === "object" && t.feita).length}
+      de ${tarefas.length} objetivos concluídos.
+    </p>
+  `);
+}
+
+function adicionarTarefa() {
+  const campo = document.querySelector("#novaTarefa");
+  const texto = campo?.value.trim();
+
+  if (!texto) {
+    alert("Escreva uma tarefa primeiro!");
+    return;
   }
 
-  function adicionarTarefa() {
-    const campo = document.querySelector("#novaTarefa");
-    const texto = campo?.value.trim();
+  tarefas.push({ texto, feita: false });
+  salvar("tarefas", tarefas);
+  abrirChecklist();
+}
 
-    if (!texto) {
-      alert("Escreva uma tarefa primeiro!");
-      return;
-    }
+function alternarTarefa(indice, feita) {
+  if (!tarefas[indice]) return;
 
-    tarefas.push({ texto, feita: false });
-    salvar("tarefas", tarefas);
-    abrirChecklist();
-  }
-
-  function alternarTarefa(indice, feita) {
-    if (!tarefas[indice]) return;
-
+  if (typeof tarefas[indice] === "string") {
+    tarefas[indice] = {
+      texto: tarefas[indice],
+      feita
+    };
+  } else {
     tarefas[indice].feita = feita;
-    salvar("tarefas", tarefas);
-    abrirChecklist();
   }
+
+  salvar("tarefas", tarefas);
+  abrirChecklist();
+}
+
+function removerTarefa(indice) {
+  if (indice < 0 || indice >= tarefas.length) return;
+
+  tarefas.splice(indice, 1);
+  salvar("tarefas", tarefas);
+  abrirChecklist();
+}
 
   // ==========================================
   // DIÁRIO DE ANOTAÇÕES
@@ -943,40 +976,46 @@ function abrirMapa() {
   // CLIQUES DO APLICATIVO
   // ==========================================
 
-  main.addEventListener("click", evento => {
-    const botao = evento.target.closest("button");
-    if (!botao) return;
+main.addEventListener("click", evento => {
+  const botao = evento.target.closest("button");
+  if (!botao) return;
 
-    const acao = botao.dataset.acao;
-    const tela = botao.dataset.tela;
+  const acao = botao.dataset.acao;
+  const tela = botao.dataset.tela;
 
-    if (tela === "anotacoes") abrirAnotacoes();
-    if (tela === "calendario") abrirCalendario();
-    if (tela === "mapa") abrirMapa();
-    if (tela === "lojas") abrirLojas();
-    if (tela === "notebooks") abrirNotebooks();
-    if (tela === "checklist") abrirChecklist();
-    if (tela === "orcamento") abrirOrcamento();
-    if (tela === "galeria") abrirGaleria();
+  if (botao.dataset.removerTarefa !== undefined) {
+    evento.preventDefault();
+    removerTarefa(Number(botao.dataset.removerTarefa));
+    return;
+  }
 
-    if (acao === "inicio") voltarInicio();
-    if (acao === "adicionar-tarefa") adicionarTarefa();
-    if (acao === "adicionar-gasto") adicionarGasto();
-    if (acao === "salvar-anotacao") salvarAnotacao();
-    if (acao === "salvar-nomes-cores") salvarNomesCores();
+  if (tela === "anotacoes") abrirAnotacoes();
+  if (tela === "calendario") abrirCalendario();
+  if (tela === "mapa") abrirMapa();
+  if (tela === "lojas") abrirLojas();
+  if (tela === "notebooks") abrirNotebooks();
+  if (tela === "checklist") abrirChecklist();
+  if (tela === "orcamento") abrirOrcamento();
+  if (tela === "galeria") abrirGaleria();
 
-    if (botao.dataset.removerGasto !== undefined) {
-      removerGasto(Number(botao.dataset.removerGasto));
-    }
+  if (acao === "inicio") voltarInicio();
+  if (acao === "adicionar-tarefa") adicionarTarefa();
+  if (acao === "adicionar-gasto") adicionarGasto();
+  if (acao === "salvar-anotacao") salvarAnotacao();
+  if (acao === "salvar-nomes-cores") salvarNomesCores();
 
-    if (botao.dataset.removerAnotacao !== undefined) {
-      removerAnotacao(Number(botao.dataset.removerAnotacao));
-    }
+  if (botao.dataset.removerGasto !== undefined) {
+    removerGasto(Number(botao.dataset.removerGasto));
+  }
 
-    if (botao.dataset.removerFoto !== undefined) {
-      removerFoto(Number(botao.dataset.removerFoto));
-    }
-  });
+  if (botao.dataset.removerAnotacao !== undefined) {
+    removerAnotacao(Number(botao.dataset.removerAnotacao));
+  }
+
+  if (botao.dataset.removerFoto !== undefined) {
+    removerFoto(Number(botao.dataset.removerFoto));
+  }
+});
 
   // ==========================================
   // ALTERAÇÕES E ARQUIVOS
@@ -986,7 +1025,7 @@ function abrirMapa() {
     const elemento = evento.target;
 
     if (elemento.matches("[data-tarefa]")) {
-      marcarTarefa(Number(elemento.dataset.tarefa), elemento.checked);
+      alternarTarefa(Number(elemento.dataset.tarefa), elemento.checked);
     }
 
     if (elemento.matches("#selecionarFotos")) {
@@ -995,7 +1034,7 @@ function abrirMapa() {
   });
 
   console.log("Paraguai 2027 carregado!");
-  
+
   // ==========================================
   // SERVICE WORKER — MODO OFFLINE
   // ==========================================
