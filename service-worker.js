@@ -1,5 +1,5 @@
 
-const CACHE_NAME = "expedicao-paraguai-v1";
+const CACHE_NAME = "expedicao-paraguai-v2";
 
 const ARQUIVOS = [
   "./",
@@ -7,11 +7,10 @@ const ARQUIVOS = [
   "./style.css",
   "./app.js",
   "./manifest.json",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png"
+  "./icons/icon.svg"
 ];
 
-// Instalação e armazenamento dos arquivos
+// Instalação e armazenamento
 self.addEventListener("install", evento => {
   evento.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
@@ -37,7 +36,7 @@ self.addEventListener("activate", evento => {
   self.clients.claim();
 });
 
-// Busca arquivos salvos quando estiver offline
+// Funcionamento offline
 self.addEventListener("fetch", evento => {
   if (evento.request.method !== "GET") return;
 

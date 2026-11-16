@@ -1,17 +1,48 @@
 
 <svg xmlns="http://www.w3.org/2000/svg"
      viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="115" fill="#7546C8"/>
-  <circle cx="256" cy="256" r="190" fill="#9565DF"/>
-  <path d="M115 155 L397 155 L397 345 L115 345 Z"
-        rx="20" fill="#FFFFFF"/>
-  <path d="M115 155 L397 155 L397 218 L115 218 Z"
-        fill="#E94D63"/>
-  <path d="M115 282 L397 282 L397 345 L115 345 Z"
+
+  <!-- Fundo -->
+  <rect width="512" height="512"
+        rx="115" fill="#7546C8"/>
+
+  <circle cx="256" cy="235" r="190"
+          fill="#9565DF"/>
+
+  <!-- Notebook -->
+  <rect x="115" y="115"
+        width="282" height="205"
+        rx="22" fill="#FFFFFF"/>
+
+  <rect x="130" y="130"
+        width="252" height="175"
+        rx="10" fill="#242038"/>
+
+  <!-- Tela -->
+  <rect x="145" y="145"
+        width="222" height="145"
+        rx="5" fill="#E94D63"/>
+
+  <rect x="145" y="218"
+        width="222" height="72"
         fill="#4778D0"/>
-  <text x="256" y="265" text-anchor="middle"
-        font-size="105">💻</text>
-  <text x="256" y="408" text-anchor="middle"
-        font-family="Arial" font-size="38"
-        font-weight="bold" fill="#FFFFFF">2027</text>
+
+  <!-- Base do notebook -->
+  <path d="M95 320 H417 L390 350
+           Q385 358 372 358 H140
+           Q127 358 122 350 Z"
+        fill="#FFFFFF"/>
+
+  <rect x="220" y="322"
+        width="72" height="7"
+        rx="3" fill="#B9A4DC"/>
+
+  <!-- Ano -->
+  <text x="256" y="420"
+        text-anchor="middle"
+        font-family="Arial, sans-serif"
+        font-size="48"
+        font-weight="bold"
+        fill="#FFFFFF">2027</text>
+
 </svg>
